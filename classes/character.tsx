@@ -85,8 +85,8 @@ export class Character {
     this.buttonHome.style.opacity = "1";
     this.selectTrigger.style.opacity = "1";
     if (state === "none") {
-      this.buttonHome.style.opacity = ".4";
-      this.selectTrigger.style.opacity = ".4";
+      this.buttonHome.style.opacity = ".3";
+      this.selectTrigger.style.opacity = ".3";
     }
   }
 
@@ -169,6 +169,20 @@ export class Character {
         this.indexFrameY++;
         if (this.indexFrameY >= this.frameY.length - 1) {
           this.indexFrameY = 0;
+          if (
+            !this.animations.at(this.currentAnimation)?.name.includes("Idle") &&
+            !this.animations.at(this.currentAnimation)?.name.includes("Move") &&
+            !this.animations
+              .at(this.currentAnimation)
+              ?.name.includes("Standby") &&
+            !this.animations.at(this.currentAnimation)?.name.includes("Magic")
+          ) {
+            this.paused = true;
+            this.buttonRunAnimation.style.display = "flex";
+            this.buttonPauseAnimation.style.display = "none";
+            this.setPointerEvents("all");
+            return;
+          }
         }
       }
 

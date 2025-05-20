@@ -84,38 +84,35 @@ export function CanvasComponent({ character }: { character: Character }) {
       ></canvas>
 
       <div className="flex flex-wrap items-center justify-center gap-4">
-        <Button id="buttonHome" asChild variant={"outline"} title="Home">
-          <Link href="/">
-            <Home className="fill-foreground" />
-          </Link>
-        </Button>
-
-        <Button
-          id="buttonLightMode"
-          variant={"outline"}
-          title="Light On"
-          onClick={() => {
-            document.querySelector("canvas")!.style.backgroundColor = "#fff";
-            document.getElementById("buttonDarkMode")!.style.display = "flex";
-            document.getElementById("buttonLightMode")!.style.display = "none";
+        <Select
+          defaultValue={selectedAnimation}
+          onValueChange={(value) => {
+            setSelectError(false);
+            setSelectedAnimation(value);
+            setCanvasWidth(character.animations[Number(value)].width);
+            setCanvasHeight(character.animations[Number(value)].height);
           }}
         >
-          <Lightbulb className="fill-foreground" />
-        </Button>
-        <Button
-          id="buttonDarkMode"
-          variant={"outline"}
-          title="Light Off"
-          className="hidden"
-          onClick={() => {
-            document.querySelector("canvas")!.style.backgroundColor = "#000";
-            document.getElementById("buttonLightMode")!.style.display = "flex";
-            document.getElementById("buttonDarkMode")!.style.display = "none";
-          }}
-        >
-          <LightbulbOff className="fill-foreground" />
-        </Button>
-
+          <SelectTrigger
+            id="selectTrigger"
+            className={cn("select-none w-max", {
+              "text-destructive dark:text-destructive border-destructive dark:border-destructive focus:ring-destructive animate-pulse":
+                selectError,
+            })}
+          >
+            <SelectValue placeholder="Select an animation" />
+          </SelectTrigger>
+          <SelectContent>
+            {character.animations.map((animation, i) => (
+              <SelectItem key={i} value={String(i)}>
+                <div className="flex items-center mr-3 gap-x-2">
+                  <Play className="size-3 fill-foreground" />
+                  {animation.name}
+                </div>
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
         <Button
           id="buttonRunAnimation"
           variant={"outline"}
@@ -152,35 +149,37 @@ export function CanvasComponent({ character }: { character: Character }) {
           <SquareIcon className="fill-foreground" />
         </Button>
 
-        <Select
-          defaultValue={selectedAnimation}
-          onValueChange={(value) => {
-            setSelectError(false);
-            setSelectedAnimation(value);
-            setCanvasWidth(character.animations[Number(value)].width);
-            setCanvasHeight(character.animations[Number(value)].height);
+        <Button
+          id="buttonLightMode"
+          variant={"outline"}
+          title="Light On"
+          onClick={() => {
+            document.querySelector("canvas")!.style.backgroundColor = "#fff";
+            document.getElementById("buttonDarkMode")!.style.display = "flex";
+            document.getElementById("buttonLightMode")!.style.display = "none";
           }}
         >
-          <SelectTrigger
-            id="selectTrigger"
-            className={cn("select-none w-max", {
-              "text-destructive dark:text-destructive border-destructive dark:border-destructive focus:ring-destructive animate-pulse":
-                selectError,
-            })}
-          >
-            <SelectValue placeholder="Select an animation" />
-          </SelectTrigger>
-          <SelectContent>
-            {character.animations.map((animation, i) => (
-              <SelectItem key={i} value={String(i)}>
-                <div className="flex items-center mr-3 gap-x-2">
-                  <Play className="size-3 fill-foreground" />
-                  {animation.name}
-                </div>
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+          <Lightbulb className="fill-foreground" />
+        </Button>
+        <Button
+          id="buttonDarkMode"
+          variant={"outline"}
+          title="Light Off"
+          className="hidden"
+          onClick={() => {
+            document.querySelector("canvas")!.style.backgroundColor = "#000";
+            document.getElementById("buttonLightMode")!.style.display = "flex";
+            document.getElementById("buttonDarkMode")!.style.display = "none";
+          }}
+        >
+          <LightbulbOff className="fill-foreground" />
+        </Button>
+
+        <Button id="buttonHome" asChild variant={"outline"} title="Home">
+          <Link href="/">
+            <Home className="fill-foreground" />
+          </Link>
+        </Button>
       </div>
     </main>
   );
