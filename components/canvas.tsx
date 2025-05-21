@@ -141,6 +141,7 @@ export function CanvasComponent({ character }: { character: Character }) {
         </Button>
 
         <Button
+          id="buttonStopAnimation"
           variant={"outline"}
           onClick={() => game?.character.stopAnimation()}
           className="cursor-pointer"

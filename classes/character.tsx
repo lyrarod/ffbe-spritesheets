@@ -38,6 +38,8 @@ export class Character {
   buttonPauseAnimation: HTMLButtonElement;
   selectTrigger: HTMLSelectElement;
   buttonHome: HTMLButtonElement;
+  buttonStopAnimation: HTMLButtonElement;
+  opacity: string;
 
   constructor(game: Game, animations: Animations, indexAnimation: string) {
     this.game = game;
@@ -77,6 +79,14 @@ export class Character {
 
     this.buttonHome =
       (document.getElementById("buttonHome")! as HTMLButtonElement) || null;
+
+    this.buttonStopAnimation =
+      (document.getElementById("buttonStopAnimation")! as HTMLButtonElement) ||
+      null;
+
+    this.opacity = ".25";
+    this.buttonStopAnimation.style.pointerEvents = "none";
+    this.buttonStopAnimation.style.opacity = this.opacity;
   }
 
   setPointerEvents(state: "none" | "all") {
@@ -85,32 +95,43 @@ export class Character {
     this.buttonHome.style.opacity = "1";
     this.selectTrigger.style.opacity = "1";
     if (state === "none") {
-      this.buttonHome.style.opacity = ".3";
-      this.selectTrigger.style.opacity = ".3";
+      this.buttonHome.style.opacity = this.opacity;
+      this.selectTrigger.style.opacity = this.opacity;
+    }
+  }
+
+  toggleButtonRunPause() {
+    this.buttonRunAnimation.style.display = "none";
+    this.buttonPauseAnimation.style.display = "flex";
+
+    if (this.paused) {
+      this.buttonRunAnimation.style.display = "flex";
+      this.buttonPauseAnimation.style.display = "none";
     }
   }
 
   runAnimation() {
     this.paused = false;
-    this.buttonRunAnimation.style.display = "none";
-    this.buttonPauseAnimation.style.display = "flex";
+    this.toggleButtonRunPause();
     this.setPointerEvents("none");
+    this.buttonStopAnimation.style.opacity = "1";
+    this.buttonStopAnimation.style.pointerEvents = "all";
   }
 
   pauseAnimation() {
     this.paused = true;
-    this.buttonRunAnimation.style.display = "flex";
-    this.buttonPauseAnimation.style.display = "none";
-    this.setPointerEvents("all");
+    this.toggleButtonRunPause();
   }
 
   stopAnimation() {
     this.paused = true;
+    this.frameTimer = 0;
     this.indexFrameX = 0;
     this.indexFrameY = 0;
-    this.buttonRunAnimation.style.display = "flex";
-    this.buttonPauseAnimation.style.display = "none";
+    this.toggleButtonRunPause();
     this.setPointerEvents("all");
+    this.buttonStopAnimation.style.opacity = this.opacity;
+    this.buttonStopAnimation.style.pointerEvents = "none";
   }
 
   setAnimation(animation: string) {
@@ -177,11 +198,7 @@ export class Character {
               ?.name.includes("Standby") &&
             !this.animations.at(this.currentAnimation)?.name.includes("Magic")
           ) {
-            this.paused = true;
-            this.buttonRunAnimation.style.display = "flex";
-            this.buttonPauseAnimation.style.display = "none";
-            this.setPointerEvents("all");
-            return;
+            this.stopAnimation();
           }
         }
       }
