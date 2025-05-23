@@ -1,6 +1,21 @@
-import { CanvasComponent } from "@/components/canvas";
-import { getCharacterBySlug } from "../actions";
+import type { Metadata } from "next";
+
 import { redirect } from "next/navigation";
+import { getCharacterBySlug } from "../actions";
+import { CanvasComponent } from "@/components/canvas";
+
+type Props = {
+  params: Promise<{ slug: string }>;
+};
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params;
+  const character = getCharacterBySlug(slug);
+
+  return {
+    title: character?.name,
+  };
+}
 
 export default async function Page({
   params,
@@ -12,9 +27,5 @@ export default async function Page({
 
   if (!character) redirect("/");
 
-  return (
-    <section>
-      <CanvasComponent character={character} />
-    </section>
-  );
+  return <CanvasComponent character={character} />;
 }

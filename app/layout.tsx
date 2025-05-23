@@ -2,7 +2,10 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Final Fantasy: Brave Exvius | FFBE | Animations | Spritesheets",
+  title: {
+    template: "%s | Final Fantasy: Brave Exvius | FFBE",
+    default: "Final Fantasy: Brave Exvius | FFBE",
+  },
   description: "Final Fantasy: Brave Exvius | FFBE | Animations | Spritesheets",
 };
 
