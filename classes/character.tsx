@@ -40,6 +40,7 @@ export class Character {
   buttonHome: HTMLButtonElement;
   buttonStopAnimation: HTMLButtonElement;
   opacity: string;
+  spriteIsLoaded: boolean;
 
   constructor(game: Game, animations: Animations, indexAnimation: string) {
     this.game = game;
@@ -63,7 +64,9 @@ export class Character {
     this.frameInterval = 1000 / 8;
     this.paused = true;
     this.isAttacking = false;
+    this.spriteIsLoaded = false;
     this.sprite = new Image();
+    this.sprite.onload = () => (this.spriteIsLoaded = true);
     this.sprite.src = this.animations[this.currentAnimation].sprite;
 
     this.buttonRunAnimation =
@@ -156,6 +159,8 @@ export class Character {
   }
 
   drawCharacter() {
+    if (this.spriteIsLoaded === false) return;
+
     const ctx = this.game.ctx!;
     ctx.drawImage(
       this.sprite,
@@ -184,11 +189,12 @@ export class Character {
 
     if (this.frameTimer >= this.frameInterval) {
       this.indexFrameX++;
+
       if (this.indexFrameX >= this.frameX.length) {
         this.indexFrameX = 0;
 
         this.indexFrameY++;
-        if (this.indexFrameY >= this.frameY.length - 1) {
+        if (this.indexFrameY >= this.frameY.length) {
           this.indexFrameY = 0;
           if (
             !this.animations.at(this.currentAnimation)?.name.includes("Idle") &&
