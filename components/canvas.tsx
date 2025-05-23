@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import { Game } from "@/classes/game";
 import { Button } from "@/components/ui/button";
 import {
   Home,
@@ -18,10 +17,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { cn } from "@/lib/utils";
 import Link from "next/link";
+import { Character } from "@/Classe/character";
 
-type Character = {
+type CharacterTypo = {
   slug: string;
   name: string;
   image: string;
@@ -35,10 +34,9 @@ type Character = {
   }[];
 };
 
-export function CanvasComponent({ character }: { character: Character }) {
-  const [game, setGame] = React.useState<Game | null>(null);
+export function CanvasComponent({ character }: { character: CharacterTypo }) {
+  const [animation, setAnimation] = React.useState<Character | null>(null);
   const [selectedAnimation, setSelectedAnimation] = React.useState<string>("0");
-  const [selectError, setSelectError] = React.useState<boolean>(false);
   const [canvasWidth, setCanvasWidth] = React.useState<number>(
     character.animations[Number(selectedAnimation)].width
   );
@@ -49,8 +47,8 @@ export function CanvasComponent({ character }: { character: Character }) {
 
   React.useEffect(() => {
     if (!canvasRef.current) return;
-    setGame(
-      new Game(
+    setAnimation(
+      new Character(
         canvasRef.current,
         canvasRef.current.getContext("2d")!,
         canvasWidth,
@@ -73,7 +71,7 @@ export function CanvasComponent({ character }: { character: Character }) {
         ref={canvasRef}
         width={canvasWidth}
         height={canvasHeight}
-        className="w-full h-full transition bg-black rounded max-w-fit"
+        className="w-full h-full transition bg-black border rounded max-w-fit"
         style={{
           imageRendering: "pixelated",
           // backgroundImage: `url('/FFBE_Chamber_of_Arms_BG.webp')`,
@@ -87,19 +85,12 @@ export function CanvasComponent({ character }: { character: Character }) {
         <Select
           defaultValue={selectedAnimation}
           onValueChange={(value) => {
-            setSelectError(false);
             setSelectedAnimation(value);
             setCanvasWidth(character.animations[Number(value)].width);
             setCanvasHeight(character.animations[Number(value)].height);
           }}
         >
-          <SelectTrigger
-            id="selectTrigger"
-            className={cn("select-none w-max", {
-              "text-destructive dark:text-destructive border-destructive dark:border-destructive focus:ring-destructive animate-pulse":
-                selectError,
-            })}
-          >
+          <SelectTrigger id="selectTrigger" className="select-none w-fit">
             <SelectValue placeholder="Select an animation" />
           </SelectTrigger>
           <SelectContent>
@@ -118,14 +109,7 @@ export function CanvasComponent({ character }: { character: Character }) {
           variant={"outline"}
           className="cursor-pointer"
           title="Run"
-          onClick={() => {
-            if (!selectedAnimation) {
-              setSelectError(true);
-              alert("Please select an animation");
-              return;
-            }
-            game?.character.runAnimation();
-          }}
+          onClick={() => animation?.run()}
         >
           <Play className="fill-foreground" />
         </Button>
@@ -135,7 +119,7 @@ export function CanvasComponent({ character }: { character: Character }) {
           variant={"outline"}
           className="hidden cursor-pointer"
           title="Pause"
-          onClick={() => game?.character.pauseAnimation()}
+          onClick={() => animation?.pause()}
         >
           <Pause className="fill-foreground" />
         </Button>
@@ -143,7 +127,7 @@ export function CanvasComponent({ character }: { character: Character }) {
         <Button
           id="buttonStopAnimation"
           variant={"outline"}
-          onClick={() => game?.character.stopAnimation()}
+          onClick={() => animation?.stop()}
           className="cursor-pointer"
           title="Stop"
         >

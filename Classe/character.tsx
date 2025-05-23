@@ -1,5 +1,3 @@
-import { Game } from "@/classes/game";
-
 type Animations = {
   name: string;
   width: number;
@@ -10,7 +8,6 @@ type Animations = {
 }[];
 
 export class Character {
-  game: Game;
   width: number;
   height: number;
   x: number;
@@ -41,15 +38,31 @@ export class Character {
   buttonStopAnimation: HTMLButtonElement;
   opacity: string;
   spriteIsLoaded: boolean;
+  lastTime: number;
+  raf: number;
+  canvasWidth: number;
+  canvasHeight: number;
+  canvas: HTMLCanvasElement;
+  ctx: CanvasRenderingContext2D | undefined;
 
-  constructor(game: Game, animations: Animations, indexAnimation: string) {
-    this.game = game;
+  constructor(
+    canvas: HTMLCanvasElement,
+    ctx: CanvasRenderingContext2D,
+    canvasWidth: number,
+    canvasHeight: number,
+    animations: Animations,
+    indexAnimation: string
+  ) {
+    this.canvas = canvas;
+    this.ctx = ctx;
+    this.canvasWidth = canvasWidth;
+    this.canvasHeight = canvasHeight;
     this.animations = animations;
     this.currentAnimation = Number(indexAnimation);
     this.width = this.animations[this.currentAnimation].width;
     this.height = this.animations[this.currentAnimation].height;
-    this.x = this.game.width * 0.5 - this.width * 0.5;
-    this.y = this.game.height * 0.5 - this.height * 0.5;
+    this.x = this.canvasWidth * 0.5 - this.width * 0.5;
+    this.y = this.canvasHeight * 0.5 - this.height * 0.5;
     this.frameX = Array.from(
       { length: this.animations[this.currentAnimation].frameX },
       (_, i) => i
@@ -68,6 +81,8 @@ export class Character {
     this.sprite = new Image();
     this.sprite.onload = () => (this.spriteIsLoaded = true);
     this.sprite.src = this.animations[this.currentAnimation].sprite;
+    this.raf = 0;
+    this.lastTime = 0;
 
     this.buttonRunAnimation =
       (document.getElementById("buttonRunAnimation")! as HTMLButtonElement) ||
@@ -90,6 +105,8 @@ export class Character {
     this.opacity = ".25";
     this.buttonStopAnimation.style.pointerEvents = "none";
     this.buttonStopAnimation.style.opacity = this.opacity;
+
+    this.start();
   }
 
   setPointerEvents(state: "none" | "all") {
@@ -113,7 +130,7 @@ export class Character {
     }
   }
 
-  runAnimation() {
+  run() {
     this.paused = false;
     this.toggleButtonRunPause();
     this.setPointerEvents("none");
@@ -121,12 +138,12 @@ export class Character {
     this.buttonStopAnimation.style.pointerEvents = "all";
   }
 
-  pauseAnimation() {
+  pause() {
     this.paused = true;
     this.toggleButtonRunPause();
   }
 
-  stopAnimation() {
+  stop() {
     this.paused = true;
     this.frameTimer = 0;
     this.indexFrameX = 0;
@@ -154,15 +171,14 @@ export class Character {
     this.indexFrameY = 0;
     this.sprite.src = this.animations[this.currentAnimation].sprite;
 
-    this.x = this.game.width * 0.5 - this.width * 0.5;
-    this.y = this.game.height * 0.5 - this.height * 0.5;
+    this.x = this.canvasWidth * 0.5 - this.width * 0.5;
+    this.y = this.canvasHeight * 0.5 - this.height * 0.5;
   }
 
   drawCharacter() {
     if (this.spriteIsLoaded === false) return;
 
-    const ctx = this.game.ctx!;
-    ctx.drawImage(
+    this.ctx?.drawImage(
       this.sprite,
       this.frameX[this.indexFrameX] * this.width,
       this.frameY[this.indexFrameY] * this.height,
@@ -175,16 +191,8 @@ export class Character {
     );
   }
 
-  render() {
-    const ctx = this.game.ctx!;
-    ctx.strokeStyle = "transparent";
-    ctx.strokeRect(this.x, this.y, this.width, this.height);
-
-    this.drawCharacter();
-  }
-
   update(deltaTime: number) {
-    this.render();
+    this.drawCharacter();
     if (this.paused) return;
 
     if (this.frameTimer >= this.frameInterval) {
@@ -204,7 +212,7 @@ export class Character {
               ?.name.includes("Standby") &&
             !this.animations.at(this.currentAnimation)?.name.includes("Magic")
           ) {
-            this.stopAnimation();
+            this.stop();
           }
         }
       }
@@ -213,5 +221,19 @@ export class Character {
     } else {
       this.frameTimer += deltaTime;
     }
+  }
+
+  loop = (timeStamp: number = 0) => {
+    let deltaTime = timeStamp - this.lastTime;
+    this.lastTime = timeStamp;
+    // console.log("deltaTime:", Math.floor(deltaTime));
+
+    this.ctx?.clearRect(0, 0, this.width, this.height);
+    this.update(deltaTime);
+    this.raf = requestAnimationFrame(this.loop);
+  };
+
+  start() {
+    this.raf = requestAnimationFrame(this.loop);
   }
 }
