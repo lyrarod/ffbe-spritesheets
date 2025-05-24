@@ -3,13 +3,15 @@ import { generateSlug } from "@/lib/utils";
 
 export function getCharacters() {
   return characters.map((character) => {
+    const slug = generateSlug(character.name);
+
     return {
       ...character,
       animations: character.animations.map((animation) => ({
         ...animation,
-        sprite: `/${generateSlug(character.name)}/${animation.sprite}`,
+        sprite: `/${slug}/${animation.sprite}`,
       })),
-      slug: generateSlug(character.name),
+      slug,
     };
   });
 }

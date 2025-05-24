@@ -1,7 +1,39 @@
 export const characters = [
   {
+    name: "Sephiroth NV",
+    image: "unit_ills_207002407.png",
+    icon: "unit_icon_207002407.png",
+    animations: [
+      {
+        name: "Idle",
+        width: 291 / 3,
+        height: 1856 / 16,
+        frameX: 3,
+        frameY: 16,
+        sprite: "unit_idle_207002407.png",
+      },
+      {
+        name: "Attack",
+        width: 5000 / 20,
+        height: 137,
+        frameX: 20,
+        frameY: 1,
+        sprite: "unit_atk.png",
+      },
+      {
+        name: "Limit Burst",
+        width: 809,
+        height: 64954 / 94,
+        frameX: 1,
+        frameY: 94,
+        sprite: "unit_limit_atk.png",
+      },
+    ],
+  },
+  {
     name: "Sephiroth Brave Shift",
     image: "unit_ills_207002417.png",
+    icon: "unit_icon_207002417.png",
     animations: [
       {
         name: "Idle",
@@ -40,6 +72,7 @@ export const characters = [
   {
     name: "Fryevia",
     image: "unit_ills_302001407.png",
+    icon: "unit_icon_302001407.png",
     animations: [
       {
         name: "Idle",
@@ -70,6 +103,7 @@ export const characters = [
   {
     name: "2B Neo Vision",
     image: "unit_ills_401013807.png",
+    icon: "unit_icon_401013807.png",
     animations: [
       {
         name: "Idle",
@@ -100,6 +134,7 @@ export const characters = [
   {
     name: "A2 Neo Vision",
     image: "unit_ills_401013917.png",
+    icon: "unit_icon_401013917.png",
     animations: [
       {
         name: "Idle",
@@ -130,6 +165,7 @@ export const characters = [
   {
     name: "2B",
     image: "unit_ills_310000107.png",
+    icon: "unit_icon_310000107.png",
     animations: [
       {
         name: "Idle",
@@ -160,6 +196,7 @@ export const characters = [
   {
     name: "A2",
     image: "unit_ills_401001207.png",
+    icon: "unit_icon_401001207.png",
     animations: [
       {
         name: "Idle",
@@ -190,6 +227,7 @@ export const characters = [
   {
     name: "Barbariccia",
     image: "unit_ills_401001407.png",
+    icon: "unit_icon_401001407.png",
     animations: [
       {
         name: "Idle",
@@ -220,6 +258,7 @@ export const characters = [
   {
     name: "Barbariccia Brave Shift",
     image: "unit_ills_204001927.png",
+    icon: "unit_icon_204001927.png",
     animations: [
       {
         name: "Idle",
@@ -258,6 +297,7 @@ export const characters = [
   {
     name: "Rain",
     image: "unit_ills_100000106.png",
+    icon: "unit_icon_100000106.png",
     animations: [
       {
         name: "Idle",
@@ -288,6 +328,7 @@ export const characters = [
   {
     name: "Lasswell",
     image: "unit_ills_100000206.png",
+    icon: "unit_icon_100000206.png",
     animations: [
       {
         name: "Idle",
@@ -318,6 +359,7 @@ export const characters = [
   {
     name: "Cloud",
     image: "unit_ills_207000117.png",
+    icon: "unit_icon_207000107.png",
     animations: [
       {
         name: "Idle",
@@ -362,8 +404,48 @@ export const characters = [
     ],
   },
   {
+    name: "Cloud Brave Shift",
+    image: "unit_ills_207000127.png",
+    icon: "unit_icon_207000127.png",
+    animations: [
+      {
+        name: "Idle",
+        width: 400 / 4,
+        height: 89,
+        frameX: 4,
+        frameY: 1,
+        sprite: "unit_idle.png",
+      },
+      {
+        name: "Attack",
+        width: 4836 / 26,
+        height: 170,
+        frameX: 26,
+        frameY: 1,
+        sprite: "unit_atk.png",
+      },
+      {
+        name: "Limit Burst",
+        width: 1656 / 3,
+        height: 6489 / 21,
+        frameX: 3,
+        frameY: 21,
+        sprite: "unit_limit_atk_207000127.png",
+      },
+      {
+        name: "Brave Shift",
+        width: 3808 / 32,
+        height: 126,
+        frameX: 32,
+        frameY: 1,
+        sprite: "unit_brave_shift.png",
+      },
+    ],
+  },
+  {
     name: "Veritas of the Light",
     image: "unit_ills_100008207.png",
+    icon: "unit_icon_100008207.png",
     animations: [
       {
         name: "Idle",
@@ -442,6 +524,7 @@ export const characters = [
   {
     name: "Veritas of the Dark",
     image: "unit_ills_100007707.png",
+    icon: "unit_icon_100007707.png",
     animations: [
       {
         name: "Idle",
@@ -473,6 +556,7 @@ export const characters = [
   {
     name: "Emperor",
     image: "unit_ills_202000507.png",
+    icon: "unit_icon_202000507.png",
     animations: [
       {
         name: "Idle",
@@ -503,6 +587,7 @@ export const characters = [
   {
     name: "Emperor Brave Shift",
     image: "emperor_brave_shift.png",
+    icon: "unit_icon_202000506.png",
     animations: [
       {
         name: "Idle",
@@ -540,8 +625,9 @@ export const characters = [
   },
 
   {
-    name: "Umbral Dragon Dark Fina",
+    name: "Dark Fina Bahamut",
     image: "unit_ills_100029907.png",
+    icon: "unit_icon_100029907.png",
     animations: [
       {
         name: "Idle",
@@ -570,8 +656,9 @@ export const characters = [
     ],
   },
   {
-    name: "Black Phoenix Blade Hyoh",
+    name: "Blade Hyoh",
     image: "unit_move_100041507.png",
+    icon: "unit_move_100041507.png",
     animations: [
       {
         name: "Idle",

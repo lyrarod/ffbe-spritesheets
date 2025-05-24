@@ -138,6 +138,7 @@ export class Character {
   pause() {
     this.paused = true;
     this.toggleButtonRunPause();
+    this.setPointerEvents("all");
   }
 
   stop() {

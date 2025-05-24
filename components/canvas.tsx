@@ -19,11 +19,13 @@ import {
 } from "@/components/ui/select";
 import Link from "next/link";
 import { Character } from "@/classe/character";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 type CharacterTypo = {
-  slug: string;
+  slug?: string;
   name: string;
   image: string;
+  icon?: string;
   animations: {
     name: string;
     width: number;
@@ -65,18 +67,68 @@ export function CanvasComponent({ character }: { character: CharacterTypo }) {
   ]);
 
   return (
-    <main className="flex flex-col items-center gap-4 p-10 lg:container">
+    <main className="flex flex-col items-center gap-6 sm:container">
+      <div className="flex items-center justify-between w-full gap-2 p-4 border-b bg-background">
+        <div className="flex items-center gap-2">
+          <Avatar>
+            <AvatarImage src={`/${character.slug}/${character.icon}`} />
+            <AvatarFallback>{character.name.at(0)}</AvatarFallback>
+          </Avatar>
+          <strong className="text-sm select-none">{character.name}</strong>
+        </div>
+
+        <div className="flex items-center">
+          <Button
+            id="buttonLightMode"
+            size={"icon"}
+            variant={"ghost"}
+            title="Light On"
+            onClick={() => {
+              document.querySelector("canvas")!.style.backgroundColor = "#fff";
+              document.getElementById("buttonDarkMode")!.style.display = "flex";
+              document.getElementById("buttonLightMode")!.style.display =
+                "none";
+            }}
+          >
+            <Lightbulb className="fill-foreground" />
+          </Button>
+          <Button
+            id="buttonDarkMode"
+            size={"icon"}
+            variant={"ghost"}
+            title="Light Off"
+            className="hidden"
+            onClick={() => {
+              document.querySelector("canvas")!.style.backgroundColor = "#000";
+              document.getElementById("buttonLightMode")!.style.display =
+                "flex";
+              document.getElementById("buttonDarkMode")!.style.display = "none";
+            }}
+          >
+            <LightbulbOff className="fill-foreground" />
+          </Button>
+
+          <Button
+            id="buttonHome"
+            asChild
+            size={"icon"}
+            variant={"ghost"}
+            title="Home"
+          >
+            <Link href="/">
+              <Home className="fill-foreground" />
+            </Link>
+          </Button>
+        </div>
+      </div>
       <canvas
         ref={canvasRef}
         width={canvasWidth}
         height={canvasHeight}
         className="w-full h-full transition bg-black border rounded max-w-fit"
-        style={{
-          imageRendering: "pixelated",
-        }}
       ></canvas>
 
-      <div className="flex flex-wrap items-center justify-center gap-4">
+      <div className="flex flex-wrap items-center justify-center gap-2">
         <Select
           defaultValue={selectedAnimation}
           onValueChange={(value) => {
@@ -127,38 +179,6 @@ export function CanvasComponent({ character }: { character: CharacterTypo }) {
           title="Stop"
         >
           <SquareIcon className="fill-foreground" />
-        </Button>
-
-        <Button
-          id="buttonLightMode"
-          variant={"outline"}
-          title="Light On"
-          onClick={() => {
-            document.querySelector("canvas")!.style.backgroundColor = "#fff";
-            document.getElementById("buttonDarkMode")!.style.display = "flex";
-            document.getElementById("buttonLightMode")!.style.display = "none";
-          }}
-        >
-          <Lightbulb className="fill-foreground" />
-        </Button>
-        <Button
-          id="buttonDarkMode"
-          variant={"outline"}
-          title="Light Off"
-          className="hidden"
-          onClick={() => {
-            document.querySelector("canvas")!.style.backgroundColor = "#000";
-            document.getElementById("buttonLightMode")!.style.display = "flex";
-            document.getElementById("buttonDarkMode")!.style.display = "none";
-          }}
-        >
-          <LightbulbOff className="fill-foreground" />
-        </Button>
-
-        <Button id="buttonHome" asChild variant={"outline"} title="Home">
-          <Link href="/">
-            <Home className="fill-foreground" />
-          </Link>
         </Button>
       </div>
     </main>
