@@ -18,7 +18,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import Link from "next/link";
-import { Character } from "@/Classe/character";
+import { Character } from "@/classe/character";
 
 type CharacterTypo = {
   slug: string;
@@ -49,7 +49,6 @@ export function CanvasComponent({ character }: { character: CharacterTypo }) {
     if (!canvasRef.current) return;
     setAnimation(
       new Character(
-        canvasRef.current,
         canvasRef.current.getContext("2d")!,
         canvasWidth,
         canvasHeight,
@@ -74,10 +73,6 @@ export function CanvasComponent({ character }: { character: CharacterTypo }) {
         className="w-full h-full transition bg-black border rounded max-w-fit"
         style={{
           imageRendering: "pixelated",
-          // backgroundImage: `url('/FFBE_Chamber_of_Arms_BG.webp')`,
-          // backgroundSize: "cover",
-          // backgroundPosition: "center",
-          // backgroundRepeat: "no-repeat",
         }}
       ></canvas>
 

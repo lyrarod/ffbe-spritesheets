@@ -42,18 +42,15 @@ export class Character {
   raf: number;
   canvasWidth: number;
   canvasHeight: number;
-  canvas: HTMLCanvasElement;
   ctx: CanvasRenderingContext2D | undefined;
 
   constructor(
-    canvas: HTMLCanvasElement,
     ctx: CanvasRenderingContext2D,
     canvasWidth: number,
     canvasHeight: number,
     animations: Animations,
     indexAnimation: string
   ) {
-    this.canvas = canvas;
     this.ctx = ctx;
     this.canvasWidth = canvasWidth;
     this.canvasHeight = canvasHeight;
