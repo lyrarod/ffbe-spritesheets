@@ -18,7 +18,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import Link from "next/link";
-import { Character } from "@/Classe/character";
+import { Character } from "@/classe/character";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 type CharacterTypo = {
@@ -45,33 +45,23 @@ export function CanvasComponent({ character }: { character: CharacterTypo }) {
   const [canvasHeight, setCanvasHeight] = React.useState<number>(
     character.animations[Number(selectedAnimation)].height
   );
-  const canvasRef = React.useRef<HTMLCanvasElement | null>(null);
 
   React.useEffect(() => {
-    if (!canvasRef.current) return;
     setAnimation(
-      new Character(
-        canvasRef.current.getContext("2d")!,
-        canvasWidth,
-        canvasHeight,
-        character.animations,
-        selectedAnimation
-      )
+      new Character(character.animations, Number(selectedAnimation))
     );
-  }, [
-    canvasRef.current,
-    canvasWidth,
-    canvasHeight,
-    character.animations,
-    selectedAnimation,
-  ]);
+  }, [character.animations, selectedAnimation]);
 
   return (
     <main className="flex flex-col items-center gap-6 sm:container">
       <div className="flex items-center justify-between w-full gap-2 p-4 border-b bg-background">
         <div className="flex items-center gap-2">
-          <Avatar>
-            <AvatarImage src={`/${character.slug}/${character.icon}`} />
+          <Avatar className="border  border-primary">
+            <AvatarImage
+              src={`/${character.slug}/${character.icon}`}
+              className="object-cover"
+              style={{ imageRendering: "pixelated" }}
+            />
             <AvatarFallback>{character.name.at(0)}</AvatarFallback>
           </Avatar>
           <strong className="text-sm select-none">{character.name}</strong>
@@ -122,7 +112,7 @@ export function CanvasComponent({ character }: { character: CharacterTypo }) {
         </div>
       </div>
       <canvas
-        ref={canvasRef}
+        id="canvas"
         width={canvasWidth}
         height={canvasHeight}
         className="w-full h-full transition bg-black border rounded max-w-fit"

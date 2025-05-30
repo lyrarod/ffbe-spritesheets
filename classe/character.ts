@@ -42,20 +42,16 @@ export class Character {
   raf: number;
   canvasWidth: number;
   canvasHeight: number;
-  ctx: CanvasRenderingContext2D | undefined;
+  canvas: HTMLCanvasElement;
+  ctx: CanvasRenderingContext2D;
 
-  constructor(
-    ctx: CanvasRenderingContext2D,
-    canvasWidth: number,
-    canvasHeight: number,
-    animations: Animations,
-    indexAnimation: string
-  ) {
-    this.ctx = ctx;
-    this.canvasWidth = canvasWidth;
-    this.canvasHeight = canvasHeight;
+  constructor(animations: Animations, indexAnimation: number) {
+    this.canvas = document.getElementById("canvas") as HTMLCanvasElement;
+    this.ctx = this.canvas.getContext("2d")! as CanvasRenderingContext2D;
+    this.canvasWidth = this.canvas.width;
+    this.canvasHeight = this.canvas.height;
     this.animations = animations;
-    this.currentAnimation = Number(indexAnimation);
+    this.currentAnimation = indexAnimation;
     this.width = this.animations[this.currentAnimation].width;
     this.height = this.animations[this.currentAnimation].height;
     this.x = this.canvasWidth * 0.5 - this.width * 0.5;
@@ -152,27 +148,6 @@ export class Character {
     this.buttonStopAnimation.style.pointerEvents = "none";
   }
 
-  setAnimation(animation: string) {
-    this.currentAnimation = Number(animation);
-    // console.log(this.animations[this.currentAnimation]);
-    this.width = this.animations[this.currentAnimation].width;
-    this.height = this.animations[this.currentAnimation].height;
-    this.frameX = Array.from(
-      { length: this.animations[this.currentAnimation].frameX },
-      (_, i) => i
-    );
-    this.indexFrameX = 0;
-    this.frameY = Array.from(
-      { length: this.animations[this.currentAnimation].frameY },
-      (_, i) => i
-    );
-    this.indexFrameY = 0;
-    this.sprite.src = this.animations[this.currentAnimation].sprite;
-
-    this.x = this.canvasWidth * 0.5 - this.width * 0.5;
-    this.y = this.canvasHeight * 0.5 - this.height * 0.5;
-  }
-
   drawCharacter() {
     if (this.spriteIsLoaded === false) return;
 
@@ -226,9 +201,9 @@ export class Character {
     this.lastTime = timeStamp;
     // console.log("deltaTime:", Math.floor(deltaTime));
 
+    this.raf = requestAnimationFrame(this.loop);
     this.ctx?.clearRect(0, 0, this.width, this.height);
     this.update(deltaTime);
-    this.raf = requestAnimationFrame(this.loop);
   };
 
   start() {
