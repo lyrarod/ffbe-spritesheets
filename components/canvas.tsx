@@ -18,7 +18,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import Link from "next/link";
-import { Character } from "@/classe/character";
+import { Character } from "@/class/character";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 type CharacterTypo = {
